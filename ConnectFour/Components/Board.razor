@@ -1,12 +1,11 @@
-@using System.Drawing
 @inject GameState State
 
 <HeadContent>
     <style>
         :root {
-            --board-bg: @ColorTranslator.ToHtml(BoardColor);
-            --player1: @ColorTranslator.ToHtml(Player1Color);
-            --player2: @ColorTranslator.ToHtml(Player2Color);
+            --board-bg: yellow;
+            --player1: red;
+            --player2: blue;
         }
     </style>
 </HeadContent>
@@ -21,15 +20,16 @@
 
 <article>
     @winnerMessage
-    <button style="@ResetStyle" @onclick="ResetGame">
-        Reset the game
-    </button>
-
+    <button style="@ResetStyle" @onclick="ResetGame">Reset the game</button>
     <br />
-
     <span class="alert-danger">@errorMessage</span>
     <span class="alert-info">@CurrentTurn</span>
 </article>
+
+<p>
+    Player 1 Consecutive Wins: @player1ConsecutiveWins <br />
+    Player 2 Consecutive Wins: @player2ConsecutiveWins
+</p>
 
 <div>
     <div class="board">
@@ -48,24 +48,12 @@
 </div>
 
 @code {
-
-    [Parameter]
-    public Color BoardColor { get; set; }
-        = ColorTranslator.FromHtml("yellow");
-
-    [Parameter]
-    public Color Player1Color { get; set; }
-        = ColorTranslator.FromHtml("red");
-
-    [Parameter]
-    public Color Player2Color { get; set; }
-        = ColorTranslator.FromHtml("blue");
-
     private string[] pieces = new string[42];
-
     private string winnerMessage = string.Empty;
-
     private string errorMessage = string.Empty;
+
+    private int player1ConsecutiveWins = 0;
+    private int player2ConsecutiveWins = 0;
 
     private string CurrentTurn =>
         winnerMessage == string.Empty
@@ -80,11 +68,8 @@
     protected override void OnInitialized()
     {
         State.ResetBoard();
-
         pieces = new string[42];
-
         winnerMessage = string.Empty;
-
         errorMessage = string.Empty;
     }
 
@@ -100,14 +85,10 @@
         try
         {
             var player = State.PlayerTurn;
-
             var turn = State.CurrentTurn;
-
             var landingRow = State.PlayPiece(col);
 
-            pieces[turn] =
-                $"player{player} col{col} drop{landingRow}";
-
+            pieces[turn] = $"player{player} col{col} drop{landingRow}";
             State.NextTurn();
         }
         catch (ArgumentException ex)
@@ -115,23 +96,38 @@
             errorMessage = ex.Message;
         }
 
-        winnerMessage = State.CheckForWin() switch
+        var winState = State.CheckForWin();
+
+        winnerMessage = winState switch
         {
             GameState.WinState.Player1_Wins => "Player 1 Wins!",
             GameState.WinState.Player2_Wins => "Player 2 Wins!",
             GameState.WinState.Tie => "It's a tie!",
             _ => ""
         };
+
+        if (winState == GameState.WinState.Player1_Wins)
+        {
+            player1ConsecutiveWins++;
+            player2ConsecutiveWins = 0;
+        }
+        else if (winState == GameState.WinState.Player2_Wins)
+        {
+            player2ConsecutiveWins++;
+            player1ConsecutiveWins = 0;
+        }
+        else if (winState == GameState.WinState.Tie)
+        {
+            player1ConsecutiveWins = 0;
+            player2ConsecutiveWins = 0;
+        }
     }
 
     private void ResetGame()
     {
         State.ResetBoard();
-
         winnerMessage = string.Empty;
-
         errorMessage = string.Empty;
-
         pieces = new string[42];
     }
 }

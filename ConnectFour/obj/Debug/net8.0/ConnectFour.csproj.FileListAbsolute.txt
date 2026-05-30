@@ -30,3 +30,4 @@ C:\Users\bmoun\OneDrive\Desktop\connect 4\CSE-325-connect-4\ConnectFour\obj\Debu
 C:\Users\bmoun\OneDrive\Desktop\connect 4\CSE-325-connect-4\ConnectFour\obj\Debug\net8.0\ConnectFour.genruntimeconfig.cache
 C:\Users\bmoun\OneDrive\Desktop\connect 4\CSE-325-connect-4\ConnectFour\obj\Debug\net8.0\ref\ConnectFour.dll
 C:\Users\bmoun\OneDrive\Desktop\connect 4\CSE-325-connect-4\ConnectFour\obj\Debug\net8.0\scopedcss\Components\Board.razor.rz.scp.css
+C:\Users\bmoun\OneDrive\Desktop\connect 4\CSE-325-connect-4\ConnectFour\obj\Debug\net8.0\ConnectFour.sourcelink.json
