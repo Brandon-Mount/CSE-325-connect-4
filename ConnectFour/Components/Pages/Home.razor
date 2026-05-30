@@ -1,8 +1,28 @@
 ﻿@page "/"
+@using System.Drawing
 
 <PageTitle>Index</PageTitle>
 
+<h1>Connect Four</h1>
+
+<div class="mb-3">
+    <label>Player 1 Color:</label>
+    <input type="color" @bind="player1Color" />
+
+    <label class="ms-3">Player 2 Color:</label>
+    <input type="color" @bind="player2Color" />
+
+    <label class="ms-3">Board Color:</label>
+    <input type="color" @bind="boardColor" />
+</div>
+
 <Board @rendermode="InteractiveServer"
-       BoardColor="System.Drawing.Color.Black"
-       Player1Color="System.Drawing.Color.Green"
-       Player2Color="System.Drawing.Color.Purple" />
+       BoardColor="@ColorTranslator.FromHtml(boardColor)"
+       Player1Color="@ColorTranslator.FromHtml(player1Color)"
+       Player2Color="@ColorTranslator.FromHtml(player2Color)" />
+
+@code {
+    private string boardColor = "#000000";
+    private string player1Color = "#008000";
+    private string player2Color = "#800080";
+}
